@@ -8,6 +8,7 @@
 </head>
 <script>
     async function get_pagination_list(url){
+        // url 판별, 이전, 다음 버튼 눌렀을 때 해당하는 url 받아오고 최초접속, 1페이지 인 경우 null
         if (url == null){
             url = "http://127.0.0.1:8000/?page_size=5"
         };
@@ -17,13 +18,12 @@
         })
 
         response_json = await response.json()
-        console.log(response_json)
-
+        
+        // 게시물 뿌리는 div 선택
         const list_box = document.querySelector(".list_box");
-        list_box.innerHTML = ''
+        list_box.innerHTML = '' // 기존내용 초기화
 
-        console.log(response_json['results'])
-
+        // forEach문 돌려서 게시물 결과들 출력
         response_json['results'].forEach(data => {
             // append를 이용하기 위해서 div 생성
             const article = document.createElement('div')
@@ -39,20 +39,21 @@
             </div>`
             list_box.append(article)
         })
-        console.log(response_json['previous'])
         
+        // 이전버튼 생성할 div 선택
         const previous_div = document.querySelector(".previous")
-        previous_div.innerHTML =''
-        
+        previous_div.innerHTML ='' // div 내부 초기화
+        // 다음버튼 생성할 div 선택
         const next_div = document.querySelector(".next")
-        next_div.innerHTML =''
-
+        next_div.innerHTML ='' // div 내부 초기화
+        // 이전 버튼 생성
         if (response_json['previous'] != null){
             const previous_btn = document.createElement('span')
             previous_btn.classNAme = 'previous_btn';
             previous_btn.innerHTML= `<button type="button" onclick='get_pagination_list("${response_json['previous']}")'>이전</button>`;
             previous_div.append(previous_btn)
         }
+        // 다음 버튼 생성
         if (response_json['next'] != null){
             const next_btn = document.createElement('span')
             next_btn.classNAme = 'next_btn';
